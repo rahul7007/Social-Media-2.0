@@ -4,7 +4,7 @@ const MbDetectCtrl = require('../controllers/myController')
 const auth = require('../middleware/auth') //include middleware
 
 const router = express.Router()
-const { body } = require('express-validator');
+const { body, check } = require('express-validator/check');
 
 router.post('/register',
     body('name','Please Enter valid name').not().isEmpty(),
@@ -21,7 +21,14 @@ router.post('/login',
 )
 
 router.get('/login', auth, MbDetectCtrl.getLogin)
-// router.put('/profile/', MbDetectCtrl.updateData)
-// router.delete('/posts/', MbDetectCtrl.deleteData)
+
+router.get('/profile/me', auth, MbDetectCtrl.myProfile)
+
+//Create/update user profile
+//private
+router.post('/profile/' ,[auth, [
+    body('status', 'Status is required').not().isEmpty(),
+    body('skills', 'Skills is required').not().isEmpty()
+]], MbDetectCtrl.createProfile) 
 
 module.exports = router

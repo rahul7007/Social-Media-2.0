@@ -1,9 +1,10 @@
 const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User')
+const Profile = require('../models/Profile')
 
 registerUser = async (req, res) => {
     const errors = validationResult(req);
@@ -124,7 +125,7 @@ login = async (req, res) => {
     }
 }
 
-getLogin = async(req, res) =>{
+getLogin = async(req, res) => {
     try{
         //when we send req with token, we are expecting all the detail associated with that token except password
         const user = await User.findById(req.user.id).select('-password')
@@ -135,9 +136,96 @@ getLogin = async(req, res) =>{
     }
 }
 
+myProfile = async (req, res) => {
+    try{
+        const profile = await Profile.findOne({user: req.user.id}).populate('user',['name', 'avatar'])
+        if(!profile){
+            return res.status(400).json({msg: 'There is no profile for this user'})
+        }
+        res.json(profile)
+    } catch(err){
+        console.log(err.message);
+        res.status(500).send('Server Error')
+    }
+}
+
+createProfile = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors : errors.array()})
+    }
+    
+    //destructure profile data
+    const {
+        company,
+        website,
+        location,
+        bio,
+        status,
+        githubusername,
+        skills,
+        youtube,
+        facebook,
+        twitter,
+        instagram,
+        linkedin
+    } = req.body
+ 
+    //build profile object
+    const profileFields = {}
+    profileFields.user = req.user.id;
+    if(company) profileFields.company = company;
+    if(website) profileFields.website = website;
+    if(location) profileFields.location = location;
+    if(bio) profileFields.bio = bio;
+    if(status) profileFields.status = status;
+    if(githubusername) profileFields.githubusername = githubusername;
+    if(skills){
+        profileFields.skills = skills.split(',').map(skill => skill.trim())
+    }
+    // console.log(skills)
+    // console.log(profileFields.skills);
+
+    //Build social object
+    profileFields.social = {}
+    if(youtube) profileFields.social.youtube = youtube;
+    if(facebook) profileFields.social.facebook = facebook;
+    if(twitter) profileFields.social.twitter = twitter;
+    if(instagram) profileFields.social.instagram = instagram;
+    if(linkedin) profileFields.social.linkedin = linkedin;
+
+    //update & insert the data
+    try{
+        let profile = await Profile.findOne({user:req.user.id})
+
+        if(profile){
+            //update
+            profile = await Profile.findByIdAndUpdate(
+                {user:req.user.id},
+                {$set: profileFields},
+                {new: true}
+            );
+            return res.json(profile)
+        }
+
+        //create
+        profile = new Profile(profileFields)
+        await profile.save()
+        res.json(profile)
+    
+    } catch(error){
+        console.log(err.message)
+        res.status(500).send("Server Error")
+    }
+
+    //res.send("HELLO")
+}
+
 
 module.exports = {
     registerUser,
     login,
-    getLogin
+    getLogin,
+    myProfile,
+    createProfile
 }
