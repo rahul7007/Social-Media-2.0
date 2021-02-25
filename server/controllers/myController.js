@@ -221,11 +221,61 @@ createProfile = async (req, res) => {
     //res.send("HELLO")
 }
 
+getAllProfile = async (req, res) => {
+    try {
+        const profiles = await Profile.find().populate('user', ['name','avatar'])
+        res.json(profiles)
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+getProfileByUser_id = async (req, res) => {
+    try {
+        const profile = await Profile.findOne({user:req.params.user_id}).populate('user', ['name','avatar'])
+        
+        if(!profile){
+            return res.status(500).json({msg:"Profile not found"})
+        }
+        
+        res.json(profile)
+    } catch (err) {
+        console.log(err.message);
+        if(err.kind == 'ObjectId'){
+            return res.status(500).json({ msg: "Invalid User ID" })
+        }
+        res.status(500).send("Server Error")
+    }
+}
+
+deleteUser = async (req, res) => {
+    try {
+        //@todo - remove user posts
+        
+        //delete profile
+        await Profile.findOneAndRemove({user:req.user.id})
+        
+        //delete user
+        await User.findOneAndRemove({_id:req.user.id}) 
+        
+        res.json({ msg: "User deleted"})
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Sever Error")
+    }
+
+
+
+}
 
 module.exports = {
     registerUser,
     login,
     getLogin,
     myProfile,
-    createProfile
+    createProfile,
+    getAllProfile,
+    getProfileByUser_id,
+    deleteUser
 }

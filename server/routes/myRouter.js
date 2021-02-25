@@ -32,3 +32,15 @@ router.post('/profile/' ,[auth, [
 ]], MbDetectCtrl.createProfile) 
 
 module.exports = router
+
+//Get all profile
+//public
+router.get('/profile', MbDetectCtrl.getAllProfile)
+
+//Get profile by user_id
+//public
+router.get('/profile/user/:user_id', MbDetectCtrl.getProfileByUser_id)
+
+//Delete profile, user & posts
+//private
+router.delete('/profile', auth, MbDetectCtrl.deleteUser)
