@@ -44,3 +44,34 @@ router.get('/profile/user/:user_id', MbDetectCtrl.getProfileByUser_id)
 //Delete profile, user & posts
 //private
 router.delete('/profile', auth, MbDetectCtrl.deleteUser)
+
+//Add experience
+//private
+router.put('/profile/experience', [auth,[
+    check('title', 'Title is required').not().isEmpty(),
+    check('company', 'Company is required').not().isEmpty(),
+    check('from', 'From date is required').not().isEmpty()
+]], MbDetectCtrl.addExperience)
+
+//Delete experience from profile
+//private
+router.delete('/profile/experience:exp_id', auth, MbDetectCtrl.deleteExperience)
+
+//@ Add profile education
+//@ private
+
+router.put('/profile/education', [auth,[
+    check('school', 'School is required').not().isEmpty(),
+    check('degree', 'Degree is required').not().isEmpty(),
+    check('fieldofstudy', 'Field of study is required').not().isEmpty(),
+    check('from', 'From date is required').not().isEmpty()
+]], MbDetectCtrl.addEducation)
+
+
+//Delete education from profile
+//private
+router.delete('/profile/education:edu_id', auth, MbDetectCtrl.deleteEducation)
+
+//Get user repo from guthub
+//public
+router.get('/profile/github/:username', MbDetectCtrl.gitGuthubRepo)

@@ -1,6 +1,7 @@
 const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const request = require('request')
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User')
@@ -269,6 +270,152 @@ deleteUser = async (req, res) => {
 
 }
 
+addExperience = async(req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors : errors.array()})
+    }
+
+    //destructure from body
+    const{
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description
+    } =req.body
+
+    const newExp = {
+        title: title,
+        company: company,
+        location,
+        from,
+        to,
+        current,
+        description
+    }
+
+    try {
+        const profile = await Profile.findOne({ user: req.user.id }) //user id will get from token
+
+        profile.experience.unshift(newExp)
+
+        await profile.save()
+
+        res.json(profile)
+    } catch (error) {
+        console.log(error,message);
+        res.status(500).send("Server Error")
+    }
+}
+
+deleteExperience = async(req, res) =>{
+    try {
+        const profile = await Profile.findOne({user: req.user.id})
+
+        //Get remove index
+        const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id)
+
+        profile.experience.splice(removeIndex, 1)
+
+        await profile.save()
+        
+        res.json(profile)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+addEducation = async (req, res) =>{
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors : errors.array()})
+    }
+
+    //destructure from body
+    const{
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description
+    } =req.body
+
+    const newEdu = {
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description
+    }
+
+    try {
+        const profile = await Profile.findOne({ user: req.user.id }) //user id will get from token
+
+        profile.education.unshift(newEdu)
+
+        await profile.save()
+
+        res.json(profile)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+deleteEducation = async(req, res) =>{
+    try {
+        const profile = await Profile.findOne({user: req.user.id})
+
+        //Get remove index
+        const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id)
+
+        profile.education.splice(removeIndex, 1)
+
+        await profile.save()
+        
+        res.json(profile)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+    console.log("DELETE");
+}
+
+gitGuthubRepo = async (req, res) =>{
+    try {
+        //display the last 5 repo (per_page=5)
+        const options = {
+            uri : `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc
+                    &client_id=ac5ee8981422ef02f74a&client_secret=d114aa875f835bb7a127971de5b3c524734f2ed9`,
+            method: 'GET',
+            headers: { 'user-agent' : 'node.js' }
+        };
+        request(options, (error, response, body) =>{
+            if(error) console.log(error);
+
+            //send 404 if username is not exist
+            if(response.statusCode !== 200){
+                return res.status(404).json({ msg: 'No github account found'})
+            }
+
+            // res.json(body)
+            res.json(JSON.parse(body))
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+    // console.log("TEST");
+}
+
 module.exports = {
     registerUser,
     login,
@@ -277,5 +424,12 @@ module.exports = {
     createProfile,
     getAllProfile,
     getProfileByUser_id,
-    deleteUser
+    deleteUser,
+    addExperience,
+    deleteExperience,
+    addEducation,
+    deleteEducation,
+    gitGuthubRepo
+    // ac5ee8981422ef02f74a
+    //d114aa875f835bb7a127971de5b3c524734f2ed9
 }
