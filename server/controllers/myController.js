@@ -394,7 +394,7 @@ gitGuthubRepo = async (req, res) =>{
         //display the last 5 repo (per_page=5)
         const options = {
             uri : `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc
-                    &client_id=ac5ee8981422ef02f74a&client_secret=d114aa875f835bb7a127971de5b3c524734f2ed9`,
+                    &client_id=&client_secret=`,
             method: 'GET',
             headers: { 'user-agent' : 'node.js' }
         };
