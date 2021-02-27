@@ -5,7 +5,8 @@ const request = require('request')
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User')
-const Profile = require('../models/Profile')
+const Profile = require('../models/Profile');
+const Post = require('../models/Post');
 
 registerUser = async (req, res) => {
     const errors = validationResult(req);
@@ -413,7 +414,89 @@ gitGuthubRepo = async (req, res) =>{
         console.log(error.message);
         res.status(500).send("Server Error")
     }
-    // console.log("TEST");
+}
+
+createPosts = async(req, res) =>{
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors : errors.array()})
+    }
+
+    try {
+        const user = await User.findById(req.user.id).select('-password') //will bring user model except password
+        console.log("user's info :", user);
+    
+        const newPost = new Post({
+            text: req.body.text,
+            name: user.name,
+            avatar: user.avatar,
+            user:  req.user.id
+        })
+        
+        const post = await newPost.save()
+
+        res.json(post)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server error")
+    }
+}
+
+getAllPosts = async (req, res) => {
+    try {
+        const posts = await Post.find().sort({ date : -1})
+        res.json(posts)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+getAllPostById = async (req, res) =>{
+    try {
+        const post = await Post.findById(req.params.id)
+
+        //if there is no post against this user
+        if(!post){
+            return res.status(500).json({msg : "Post not found"})
+        }
+        res.json(post)
+    } catch (error) {
+        console.log(error.message);
+        //if the id is not a valid ObjectId
+        if(error.kind === 'ObjectId'){
+            return res.status(404).json({ msg: 'Post not found against this user'})
+        }
+        res.json(500).send("Server Error")
+    }
+}
+
+detPostById = async (req, res) =>{
+    try {
+        const post = await Post.findById(req.params.id)
+
+        //if there is no post against this user
+        if(!post){
+            return res.status(500).json({msg : "Post not found"})
+        }        
+
+        //check if the same user is deleting the post who posted
+        if(post.user.toString() !== req.user.id) //check post associated if with id from token
+        {
+            return res.status(401).json({msg:'User not authorised'})
+        }
+
+        await post.remove()
+
+        res.json({msg:'Post deleted'})
+    } catch (error) {
+        console.log(error.message);
+        //if the id is not a valid ObjectId
+        if(error.kind === 'ObjectId'){
+            return res.status(404).json({ msg: 'Post not found against this user'})
+        }        
+        res.status(500).send("Server Error")
+    }
 }
 
 module.exports = {
@@ -429,7 +512,9 @@ module.exports = {
     deleteExperience,
     addEducation,
     deleteEducation,
-    gitGuthubRepo
-    // ac5ee8981422ef02f74a
-    //d114aa875f835bb7a127971de5b3c524734f2ed9
+    gitGuthubRepo,
+    createPosts,
+    getAllPosts,
+    getAllPostById,
+    detPostById
 }

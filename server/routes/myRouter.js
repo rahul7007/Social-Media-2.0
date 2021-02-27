@@ -75,3 +75,21 @@ router.delete('/profile/education:edu_id', auth, MbDetectCtrl.deleteEducation)
 //Get user repo from guthub
 //public
 router.get('/profile/github/:username', MbDetectCtrl.gitGuthubRepo)
+
+//Create a post
+//private
+router.post('/posts', [auth, [
+    check('text', 'Text is required').not().isEmpty()
+]], MbDetectCtrl.createPosts)
+
+//Get all posts
+//private
+router.get('/getAllPosts', auth, MbDetectCtrl.getAllPosts)
+
+//Get post by id
+//private
+router.get('/getPostById/:id', auth, MbDetectCtrl.getAllPostById)
+
+//Delete a post by id
+//private
+router.delete('/detPostById/:id', auth, MbDetectCtrl.detPostById)
