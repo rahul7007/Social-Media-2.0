@@ -93,3 +93,26 @@ router.get('/getPostById/:id', auth, MbDetectCtrl.getAllPostById)
 //Delete a post by id
 //private
 router.delete('/detPostById/:id', auth, MbDetectCtrl.detPostById)
+
+// @route    PUT api/posts/like/:id
+// @desc     Like a post
+// @access   Private
+router.put('/posts/like/:id', auth, MbDetectCtrl.likePost)
+
+// @route    PUT api/posts/unlike/:id
+// @desc     Unlike a post
+// @access   Private
+router.put('/posts/unlike/:id', auth, MbDetectCtrl.unlikePost)
+
+// @route    POST api/posts/comment/:id
+// @desc     Comment on a post
+// @access   Private
+router.post('/posts/comment/:id', [auth, [
+    check('text', 'text is requird').not().isEmpty()
+]], MbDetectCtrl.commentOnPost)
+
+// @route    DELETE api/posts/comment/:id/:comment_id
+// @desc     Delete comment
+//we need both : post id & comment id. Find a post by id and which post to delete
+// @access   Private
+router.delete('/posts/comment/:id/:comment_id', auth, delCommentFromPost)

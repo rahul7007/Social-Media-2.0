@@ -499,6 +499,124 @@ detPostById = async (req, res) =>{
     }
 }
 
+likePost = async (req, res) =>{
+    try {
+        const post = await Post.findById(req.params.id)
+
+        /* post : 
+        {
+            _id: 6039e68f0aa1965fe440ec62,
+            text: 'Hi Friends, chai pee lo !',
+            name: 'rahul sarma',
+            avatar: '//www.gravatar.com/avatar/0a9d2a6050f73e99a100e3fdde942e8b?s=200&r=pg&d=mm',
+            user: 6033d3aaa070f7419c7e3e0c,
+            likes: [],
+            comments: [],
+            date: 2021-02-27T06:28:31.906Z,
+            __v: 0
+        }
+        */
+
+        //check if the post has already been liked
+        if(post.likes.filter(like => like.user.toString() === req.user.id).length>0){
+            return res.status(400).json({msg: "Post already liked"})
+        }
+
+        post.likes.unshift({user:req.user.id})
+
+        await post.save()
+
+        res.json(post.likes)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+unlikePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+
+        //check if the post has already been unliked
+        if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0){
+            return res.status(400).json({msg: "Post has not been liked yet"})
+        }
+
+        //Get remove index
+        const removeIndex = post.likes.map(like=>like.user.toString()).indexOf(req.user.id)
+        post.likes.splice(removeIndex, 1)
+
+        await post.save()
+
+        res.json(post.likes)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")        
+    }
+}
+
+commentOnPost = async (req, res) => {
+    const errors =validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+
+    try {
+        const user = await User.findById(req.user.id).select('-password')
+
+        const post = await Post.findById(req.params.id)
+
+        const newComment = {
+            text: req.body.text,
+            name: user.name,
+            avatar: user.avatar,
+            user: req.user.id
+        }
+
+        post.comments.unshift(newComment)
+
+        await post.save()
+
+        res.json(post.comments)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")
+    }
+}
+
+delCommentFromPost = async (req, res) =>{
+    try {
+        //Find the post first
+        const post = await Post.findById(req.params.id)
+
+        //Find the comment to be delete
+        const comment = post.comments.find(comment => comment.id === req.params.comment_id)
+
+        //Make sure if the comment exists
+        if(!comment){
+            return res.status(404).json({msg: 'Comments does not exists!'})
+        }
+
+        //Check user
+        if(comment.user.toString() !== req.user.id){ //req.user.id : logged in user
+            return res.status(401).json({msg: 'User not authorized'})
+        }
+
+        //Remove comment
+        const removeIndex = post.comments.map(comment => comment.user.toString()).indexOf(req.user.id)
+
+        post.comments.splice(removeIndex, 1)
+
+        await post.save()
+
+        res.json(post.comments)
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error")            
+    }
+}
+
 module.exports = {
     registerUser,
     login,
@@ -516,5 +634,9 @@ module.exports = {
     createPosts,
     getAllPosts,
     getAllPostById,
-    detPostById
+    detPostById,
+    likePost,
+    unlikePost,
+    commentOnPost,
+    delCommentFromPost
 }
