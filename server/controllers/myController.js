@@ -301,7 +301,7 @@ addExperience = async(req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id }) //user id will get from token
 
-        profile.experience.unshift(newExp)
+        profile.experience.unshift(newExp) //unshift pushes in first
 
         await profile.save()
 
@@ -428,7 +428,7 @@ createPosts = async(req, res) =>{
     
         const newPost = new Post({
             text: req.body.text,
-            name: user.name,
+            name: user.name, // name, avatar & user object id will come from user
             avatar: user.avatar,
             user:  req.user.id
         })
