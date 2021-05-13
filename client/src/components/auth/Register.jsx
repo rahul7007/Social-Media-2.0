@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api";
 
+//redux
+import { alert } from "../../action/AlertAction";
+import { useDispatch } from "react-redux";
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -9,6 +13,8 @@ const Register = () => {
     password: "",
     passwordConfirm: "",
   });
+
+  const dispatch = useDispatch();
 
   const { name, email, passwordConfirm, password } = formData;
 
@@ -19,7 +25,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== passwordConfirm) {
-      console.log("Password mismatch");
+      dispatch(alert("Password donot match", "danger"));
     } else {
       //   console.log(formData);
       const newUser = {
