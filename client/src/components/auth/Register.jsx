@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../../api";
+// import api from "../../api";
 
 //redux
 import { alert } from "../../action/AlertAction";
 import { useDispatch } from "react-redux";
+import { registerMe } from "../../action/AuthAction";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,24 +29,25 @@ const Register = () => {
       dispatch(alert("Password donot match", "danger"));
     } else {
       //   console.log(formData);
-      const newUser = {
-        name,
-        email,
-        password,
-      };
+      // const newUser = {
+      //   name,
+      //   email,
+      //   password,
+      // };
 
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        await api.register(newUser).then((res) => {
-          console.log(res);
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   const config = {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   };
+      //   await api.register(newUser).then((res) => {
+      //     console.log(res);
+      //   });
+      // } catch (err) {
+      //   console.log(err);
+      // }
+      dispatch(registerMe({ name, email, password }));
     }
   };
   return (
@@ -62,7 +64,7 @@ const Register = () => {
             name="name"
             value={name}
             onChange={handleChange}
-            required
+            // required
           />
         </div>
         <div className="form-group">
@@ -72,7 +74,7 @@ const Register = () => {
             name="email"
             value={email}
             onChange={handleChange}
-            required
+            // required
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -84,7 +86,7 @@ const Register = () => {
             type="password"
             placeholder="Password"
             name="password"
-            minLength="6"
+            // minLength="6"
             value={password}
             onChange={handleChange}
           />
@@ -94,7 +96,7 @@ const Register = () => {
             type="password"
             placeholder="Confirm Password"
             name="passwordConfirm"
-            minLength="6"
+            // minLength="6"
             value={passwordConfirm}
             onChange={handleChange}
           />

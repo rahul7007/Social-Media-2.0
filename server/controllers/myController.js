@@ -16,20 +16,20 @@ registerUser = async (req, res) => {
 
     const { name, email, password } = req.body
 
-    try{
+    try {
         //Checks if user already exists
         let user = await User.findOne({ email })
-        if(user){
-            return res.status(400).json({ 
-                errors: 
+        if (user) {
+            return res.status(400).json({
+                errors:
                     [
-                        {msg: 'User already exists'}
-                    ] 
+                        { msg: 'User already exists' }
+                    ]
             })
         }
-    
+
         //Get users Gravater
-        const avatar = gravatar.url( email, {
+        const avatar = gravatar.url(email, {
             s: '200',
             r: 'pg',
             d: 'mm'
@@ -41,32 +41,32 @@ registerUser = async (req, res) => {
             password,
             avatar
         })
-    
+
         //Encrypt password
         const salt = await bcrypt.genSalt(10)
         user.password = await bcrypt.hash(password, salt)
         console.log(req.body);
         await user.save()
-    
+
         //Return jsonwebtoken
         const payload = {
-            user : {
+            user: {
                 id: user.id
             }
         }
         jwt.sign(
-            payload, 
+            payload,
             'mySevretToken',
-            { expiresIn:36000 },
+            { expiresIn: 36000 },
             (err, token) => {
-                if(err) throw err
+                if (err) throw err
                 res.json({ token })
             }
         );
-    
+
         // res.send('User registered')
 
-    } catch(err){
+    } catch (err) {
         console.log(err.message);
         res.status(500).send('Server Error')
     }
@@ -80,72 +80,72 @@ login = async (req, res) => {
     }
     const { email, password } = req.body
 
-    try{
+    try {
         //Checks if user exists
         let user = await User.findOne({ email })
-        if(!user){
-            return res.status(400).json({ 
-                errors: 
+        if (!user) {
+            return res.status(400).json({
+                errors:
                     [
-                        {msg: 'Invalid credentials'}
-                    ] 
+                        { msg: 'Invalid credentials' }
+                    ]
             })
         }
 
         const isMatch = await bcrypt.compare(password, user.password)
 
-        if(!isMatch){
-            return res.status(400).json({ 
-                errors: 
+        if (!isMatch) {
+            return res.status(400).json({
+                errors:
                     [
-                        {msg: 'Invalid credentials!'}
-                    ] 
+                        { msg: 'Invalid credentials!' }
+                    ]
             })
         }
-    
+
         //Return jsonwebtoken if credential matches
         const payload = {
-            user : {
+            user: {
                 id: user.id
             }
         }
         jwt.sign(
-            payload, 
+            payload,
             'mySevretToken',
-            { expiresIn:36000 },
+            { expiresIn: 36000 },
             (err, token) => {
-                if(err) throw err
+                if (err) throw err
                 res.json({ token })
             }
         );
-    
+
         // res.send('User registered')
 
-    } catch(err){
+    } catch (err) {
         console.log(err.message);
         res.status(500).send('Server Error')
     }
 }
 
-getLogin = async(req, res) => {
-    try{
+getLogin = async (req, res) => {
+    try {
         //when we send req with token, we are expecting all the detail associated with that token except password
         const user = await User.findById(req.user.id).select('-password')
         res.json(user)
-    }catch(err){
+    } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error")
     }
 }
 
 myProfile = async (req, res) => {
-    try{
-        const profile = await Profile.findOne({user: req.user.id}).populate('user',['name', 'avatar'])
-        if(!profile){
-            return res.status(400).json({msg: 'There is no profile for this user'})
+    try {
+        const profile = await Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar'])
+        if (!profile) {
+            return res.status(400).json({ msg: 'There is no profile for this user' })
         }
         res.json(profile)
-    } catch(err){
+    } catch (err) {
         console.log(err.message);
         res.status(500).send('Server Error')
     }
@@ -153,10 +153,10 @@ myProfile = async (req, res) => {
 
 createProfile = async (req, res) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors : errors.array()})
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
-    
+
     //destructure profile data
     const {
         company,
@@ -172,17 +172,17 @@ createProfile = async (req, res) => {
         instagram,
         linkedin
     } = req.body
- 
+
     //build profile object
     const profileFields = {}
     profileFields.user = req.user.id;
-    if(company) profileFields.company = company;
-    if(website) profileFields.website = website;
-    if(location) profileFields.location = location;
-    if(bio) profileFields.bio = bio;
-    if(status) profileFields.status = status;
-    if(githubusername) profileFields.githubusername = githubusername;
-    if(skills){
+    if (company) profileFields.company = company;
+    if (website) profileFields.website = website;
+    if (location) profileFields.location = location;
+    if (bio) profileFields.bio = bio;
+    if (status) profileFields.status = status;
+    if (githubusername) profileFields.githubusername = githubusername;
+    if (skills) {
         profileFields.skills = skills.split(',').map(skill => skill.trim())
     }
     // console.log(skills)
@@ -190,22 +190,22 @@ createProfile = async (req, res) => {
 
     //Build social object
     profileFields.social = {}
-    if(youtube) profileFields.social.youtube = youtube;
-    if(facebook) profileFields.social.facebook = facebook;
-    if(twitter) profileFields.social.twitter = twitter;
-    if(instagram) profileFields.social.instagram = instagram;
-    if(linkedin) profileFields.social.linkedin = linkedin;
+    if (youtube) profileFields.social.youtube = youtube;
+    if (facebook) profileFields.social.facebook = facebook;
+    if (twitter) profileFields.social.twitter = twitter;
+    if (instagram) profileFields.social.instagram = instagram;
+    if (linkedin) profileFields.social.linkedin = linkedin;
 
     //update & insert the data
-    try{
-        let profile = await Profile.findOne({user:req.user.id})
+    try {
+        let profile = await Profile.findOne({ user: req.user.id })
 
-        if(profile){
+        if (profile) {
             //update
             profile = await Profile.findByIdAndUpdate(
-                {user:req.user.id},
-                {$set: profileFields},
-                {new: true}
+                { user: req.user.id },
+                { $set: profileFields },
+                { new: true }
             );
             return res.json(profile)
         }
@@ -214,8 +214,8 @@ createProfile = async (req, res) => {
         profile = new Profile(profileFields)
         await profile.save()
         res.json(profile)
-    
-    } catch(error){
+
+    } catch (error) {
         console.log(err.message)
         res.status(500).send("Server Error")
     }
@@ -225,7 +225,7 @@ createProfile = async (req, res) => {
 
 getAllProfile = async (req, res) => {
     try {
-        const profiles = await Profile.find().populate('user', ['name','avatar'])
+        const profiles = await Profile.find().populate('user', ['name', 'avatar'])
         res.json(profiles)
     } catch (err) {
         console.log(err.message);
@@ -235,16 +235,16 @@ getAllProfile = async (req, res) => {
 
 getProfileByUser_id = async (req, res) => {
     try {
-        const profile = await Profile.findOne({user:req.params.user_id}).populate('user', ['name','avatar'])
-        
-        if(!profile){
-            return res.status(500).json({msg:"Profile not found"})
+        const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar'])
+
+        if (!profile) {
+            return res.status(500).json({ msg: "Profile not found" })
         }
-        
+
         res.json(profile)
     } catch (err) {
         console.log(err.message);
-        if(err.kind == 'ObjectId'){
+        if (err.kind == 'ObjectId') {
             return res.status(500).json({ msg: "Invalid User ID" })
         }
         res.status(500).send("Server Error")
@@ -254,14 +254,14 @@ getProfileByUser_id = async (req, res) => {
 deleteUser = async (req, res) => {
     try {
         //@todo - remove user posts
-        
+
         //delete profile
-        await Profile.findOneAndRemove({user:req.user.id})
-        
+        await Profile.findOneAndRemove({ user: req.user.id })
+
         //delete user
-        await User.findOneAndRemove({_id:req.user.id}) 
-        
-        res.json({ msg: "User deleted"})
+        await User.findOneAndRemove({ _id: req.user.id })
+
+        res.json({ msg: "User deleted" })
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Sever Error")
@@ -271,14 +271,14 @@ deleteUser = async (req, res) => {
 
 }
 
-addExperience = async(req, res) => {
+addExperience = async (req, res) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({ errors : errors.array()})
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
     //destructure from body
-    const{
+    const {
         title,
         company,
         location,
@@ -286,7 +286,7 @@ addExperience = async(req, res) => {
         to,
         current,
         description
-    } =req.body
+    } = req.body
 
     const newExp = {
         title: title,
@@ -307,14 +307,14 @@ addExperience = async(req, res) => {
 
         res.json(profile)
     } catch (error) {
-        console.log(error,message);
+        console.log(error, message);
         res.status(500).send("Server Error")
     }
 }
 
-deleteExperience = async(req, res) =>{
+deleteExperience = async (req, res) => {
     try {
-        const profile = await Profile.findOne({user: req.user.id})
+        const profile = await Profile.findOne({ user: req.user.id })
 
         //Get remove index
         const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id)
@@ -322,7 +322,7 @@ deleteExperience = async(req, res) =>{
         profile.experience.splice(removeIndex, 1)
 
         await profile.save()
-        
+
         res.json(profile)
     } catch (error) {
         console.log(error.message);
@@ -330,14 +330,14 @@ deleteExperience = async(req, res) =>{
     }
 }
 
-addEducation = async (req, res) =>{
+addEducation = async (req, res) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({ errors : errors.array()})
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
     //destructure from body
-    const{
+    const {
         school,
         degree,
         fieldofstudy,
@@ -345,7 +345,7 @@ addEducation = async (req, res) =>{
         to,
         current,
         description
-    } =req.body
+    } = req.body
 
     const newEdu = {
         school,
@@ -371,9 +371,9 @@ addEducation = async (req, res) =>{
     }
 }
 
-deleteEducation = async(req, res) =>{
+deleteEducation = async (req, res) => {
     try {
-        const profile = await Profile.findOne({user: req.user.id})
+        const profile = await Profile.findOne({ user: req.user.id })
 
         //Get remove index
         const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id)
@@ -381,7 +381,7 @@ deleteEducation = async(req, res) =>{
         profile.education.splice(removeIndex, 1)
 
         await profile.save()
-        
+
         res.json(profile)
     } catch (error) {
         console.log(error.message);
@@ -390,21 +390,21 @@ deleteEducation = async(req, res) =>{
     console.log("DELETE");
 }
 
-gitGuthubRepo = async (req, res) =>{
+gitGuthubRepo = async (req, res) => {
     try {
         //display the last 5 repo (per_page=5)
         const options = {
-            uri : `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc
+            uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc
                     &client_id=&client_secret=`,
             method: 'GET',
-            headers: { 'user-agent' : 'node.js' }
+            headers: { 'user-agent': 'node.js' }
         };
-        request(options, (error, response, body) =>{
-            if(error) console.log(error);
+        request(options, (error, response, body) => {
+            if (error) console.log(error);
 
             //send 404 if username is not exist
-            if(response.statusCode !== 200){
-                return res.status(404).json({ msg: 'No github account found'})
+            if (response.statusCode !== 200) {
+                return res.status(404).json({ msg: 'No github account found' })
             }
 
             // res.json(body)
@@ -416,23 +416,23 @@ gitGuthubRepo = async (req, res) =>{
     }
 }
 
-createPosts = async(req, res) =>{
+createPosts = async (req, res) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({ errors : errors.array()})
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
     try {
         const user = await User.findById(req.user.id).select('-password') //will bring user model except password
         console.log("user's info :", user);
-    
+
         const newPost = new Post({
             text: req.body.text,
             name: user.name, // name, avatar & user object id will come from user
             avatar: user.avatar,
-            user:  req.user.id
+            user: req.user.id
         })
-        
+
         const post = await newPost.save()
 
         res.json(post)
@@ -444,7 +444,7 @@ createPosts = async(req, res) =>{
 
 getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find().sort({ date : -1})
+        const posts = await Post.find().sort({ date: -1 })
         res.json(posts)
     } catch (error) {
         console.log(error.message);
@@ -452,54 +452,54 @@ getAllPosts = async (req, res) => {
     }
 }
 
-getAllPostById = async (req, res) =>{
+getAllPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
 
         //if there is no post against this user
-        if(!post){
-            return res.status(500).json({msg : "Post not found"})
+        if (!post) {
+            return res.status(500).json({ msg: "Post not found" })
         }
         res.json(post)
     } catch (error) {
         console.log(error.message);
         //if the id is not a valid ObjectId
-        if(error.kind === 'ObjectId'){
-            return res.status(404).json({ msg: 'Post not found against this user'})
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Post not found against this user' })
         }
         res.json(500).send("Server Error")
     }
 }
 
-detPostById = async (req, res) =>{
+detPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
 
         //if there is no post against this user
-        if(!post){
-            return res.status(500).json({msg : "Post not found"})
-        }        
+        if (!post) {
+            return res.status(500).json({ msg: "Post not found" })
+        }
 
         //check if the same user is deleting the post who posted
-        if(post.user.toString() !== req.user.id) //check post associated if with id from token
+        if (post.user.toString() !== req.user.id) //check post associated if with id from token
         {
-            return res.status(401).json({msg:'User not authorised'})
+            return res.status(401).json({ msg: 'User not authorised' })
         }
 
         await post.remove()
 
-        res.json({msg:'Post deleted'})
+        res.json({ msg: 'Post deleted' })
     } catch (error) {
         console.log(error.message);
         //if the id is not a valid ObjectId
-        if(error.kind === 'ObjectId'){
-            return res.status(404).json({ msg: 'Post not found against this user'})
-        }        
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Post not found against this user' })
+        }
         res.status(500).send("Server Error")
     }
 }
 
-likePost = async (req, res) =>{
+likePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
 
@@ -518,11 +518,11 @@ likePost = async (req, res) =>{
         */
 
         //check if the post has already been liked
-        if(post.likes.filter(like => like.user.toString() === req.user.id).length>0){
-            return res.status(400).json({msg: "Post already liked"})
+        if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+            return res.status(400).json({ msg: "Post already liked" })
         }
 
-        post.likes.unshift({user:req.user.id})
+        post.likes.unshift({ user: req.user.id })
 
         await post.save()
 
@@ -538,12 +538,12 @@ unlikePost = async (req, res) => {
         const post = await Post.findById(req.params.id)
 
         //check if the post has already been unliked
-        if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0){
-            return res.status(400).json({msg: "Post has not been liked yet"})
+        if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+            return res.status(400).json({ msg: "Post has not been liked yet" })
         }
 
         //Get remove index
-        const removeIndex = post.likes.map(like=>like.user.toString()).indexOf(req.user.id)
+        const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id)
         post.likes.splice(removeIndex, 1)
 
         await post.save()
@@ -551,14 +551,14 @@ unlikePost = async (req, res) => {
         res.json(post.likes)
     } catch (error) {
         console.log(error.message);
-        res.status(500).send("Server Error")        
+        res.status(500).send("Server Error")
     }
 }
 
 commentOnPost = async (req, res) => {
-    const errors =validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()})
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
     try {
@@ -584,7 +584,7 @@ commentOnPost = async (req, res) => {
     }
 }
 
-delCommentFromPost = async (req, res) =>{
+delCommentFromPost = async (req, res) => {
     try {
         //Find the post first
         const post = await Post.findById(req.params.id)
@@ -593,13 +593,13 @@ delCommentFromPost = async (req, res) =>{
         const comment = post.comments.find(comment => comment.id === req.params.comment_id)
 
         //Make sure if the comment exists
-        if(!comment){
-            return res.status(404).json({msg: 'Comments does not exists!'})
+        if (!comment) {
+            return res.status(404).json({ msg: 'Comments does not exists!' })
         }
 
         //Check user
-        if(comment.user.toString() !== req.user.id){ //req.user.id : logged in user
-            return res.status(401).json({msg: 'User not authorized'})
+        if (comment.user.toString() !== req.user.id) { //req.user.id : logged in user
+            return res.status(401).json({ msg: 'User not authorized' })
         }
 
         //Remove comment
@@ -610,10 +610,10 @@ delCommentFromPost = async (req, res) =>{
         await post.save()
 
         res.json(post.comments)
-        
+
     } catch (error) {
         console.log(error.message);
-        res.status(500).send("Server Error")            
+        res.status(500).send("Server Error")
     }
 }
 
