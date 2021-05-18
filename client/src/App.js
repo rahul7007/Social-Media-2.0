@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -9,6 +9,8 @@ import Landing from './components/Layout/Landing'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import Alert from './components/Layout/Alert'
+import Dashboard from './components/Dashboard/Dashboard'
+import PrivateRoute from './components/routing/PrivateRoute'
 import { loadUser } from './action/AuthAction'
 import setAuthToken from './utils/setAuthToken'
 
@@ -36,6 +38,7 @@ const App = () => {
           <Switch>
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </Switch>
         </section>
       </>

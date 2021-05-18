@@ -13,10 +13,6 @@ const Navbar = () => {
         (state) => state.AuthReducer.isAuthenticated
     );
 
-    const isLoading = useSelector(
-        (state) => state.AuthReducer.loading
-    );
-
     const AuthLinkes = () => {
         return (
             <ul>
@@ -26,6 +22,7 @@ const Navbar = () => {
                         <span className="hide-sm">Logout</span>
                     </a>
                 </li>
+                <li><Link to="/dashboard">DBA</Link></li>
             </ul >
         )
     }
@@ -36,6 +33,7 @@ const Navbar = () => {
                 <li><Link to="/">Developers</Link></li>
                 <li><Link to="/register">Register</Link></li>
                 <li><Link to="/login">Login</Link></li>
+                <li><Link to="/dashboard">DBN</Link></li>
             </ul >
         )
     }
