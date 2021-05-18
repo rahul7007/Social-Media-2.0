@@ -1,20 +1,24 @@
 const jwt = require('jsonwebtoken')
 
-module.exports = function(req, res, next){
+module.exports = function (req, res, next) {
+
+    console.log("Mexudaai")
     //Get the token from header
-    const token = req.header('x-auth-token')
+    const token = req.params.tempToken
+    // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjBhMjhkNzhjMzEyYjAzOGM0ODY3NGE1In0sImlhdCI6MTYyMTI2NTc4NCwiZXhwIjoxNjIxMzAxNzg0fQ.wPmy_IJnt2Dl46tTnyL2TymbEfHWrkD_esvIe2jL7QM'
+    console.log("TOKEN is ", token)
 
     //Check if no token
-    if(!token){
+    if (!token) {
         return res.status(401).json({ msg: 'No token, authorization denied!' })
     }
 
     //Verify token
-    try{
+    try {
         const decoded = jwt.verify(token, 'mySevretToken');
         req.user = decoded.user
         next()
-    } catch(err){
-        return res.status(401).json({ msg:'Invalid token!' })
+    } catch (err) {
+        return res.status(401).json({ msg: 'Invalid token!' })
     }
 }

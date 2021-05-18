@@ -5,8 +5,9 @@ const api = axios.create({
 })
 
 
-export const register = payload => api.post(`/register`, payload)
+export const register = (payload, config) => api.post(`/register`, payload, config)
 export const login = payload => api.post(`/login`, payload)
+export const getLoggedInUser = (tempToken) => api.get(`/login/${tempToken}`)
 
 
 const apis = {

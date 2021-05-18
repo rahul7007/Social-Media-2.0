@@ -19,6 +19,7 @@ const AuthReducer = (authState = initialState, action) => {
             }
 
         case "REGISTER_FAIL":
+            // case "AUTH_ERROR":
             localStorage.removeItem("token")
             return {
                 ...authState,
@@ -27,8 +28,19 @@ const AuthReducer = (authState = initialState, action) => {
                 loading: false
             }
 
+        case "USER_LOADED":
+            return {
+                ...authState,
+                isAuthenticated: true,
+                loading: false,
+                user: action.payload // this will be all the user data except password as .select(-password) in backend
+            }
+
         default: return authState
     }
 }
+
+//handle the whole process of taking token that we have stored, sending it to the backend for validation and loading the user
+//and we want that to happen every single time the main app component is loaded
 
 export default AuthReducer

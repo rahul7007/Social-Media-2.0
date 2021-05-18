@@ -4,32 +4,32 @@ const MbDetectCtrl = require('../controllers/myController')
 const auth = require('../middleware/auth') //include middleware
 
 const router = express.Router()
-const { body, check } = require('express-validator/check');
+const { body, check } = require('express-validator');
 
 router.post('/register',
-    body('name','Please Enter valid name').not().isEmpty(),
+    body('name', 'Please Enter valid name').not().isEmpty(),
     body('email', 'Please enter valid email').isEmail(),
     body('password', 'Password length must be min a length of 5').isLength({ min: 5 }),
     MbDetectCtrl.registerUser
 )
 
 
-router.post('/login', 
+router.post('/login',
     body('email', 'Please enter valid email').isEmail(),
     body('password', 'Password is required').exists(),
     MbDetectCtrl.login
 )
 
-router.get('/login', auth, MbDetectCtrl.getLogin)
+router.get('/login/:tempToken', auth, MbDetectCtrl.getLogin) //hit this all the time to see if the user is logged or not and it will also give the user data
 
 router.get('/profile/me', auth, MbDetectCtrl.myProfile)
 
 //Create/update user profile
 //private
-router.post('/profile/' ,[auth, [
+router.post('/profile/', [auth, [
     body('status', 'Status is required').not().isEmpty(),
     body('skills', 'Skills is required').not().isEmpty()
-]], MbDetectCtrl.createProfile) 
+]], MbDetectCtrl.createProfile)
 
 module.exports = router
 
@@ -47,7 +47,7 @@ router.delete('/profile', auth, MbDetectCtrl.deleteUser)
 
 //Add experience
 //private
-router.put('/profile/experience', [auth,[
+router.put('/profile/experience', [auth, [
     check('title', 'Title is required').not().isEmpty(),
     check('company', 'Company is required').not().isEmpty(),
     check('from', 'From date is required').not().isEmpty()
@@ -60,7 +60,7 @@ router.delete('/profile/experience:exp_id', auth, MbDetectCtrl.deleteExperience)
 //@ Add profile education
 //@ private
 
-router.put('/profile/education', [auth,[
+router.put('/profile/education', [auth, [
     check('school', 'School is required').not().isEmpty(),
     check('degree', 'Degree is required').not().isEmpty(),
     check('fieldofstudy', 'Field of study is required').not().isEmpty(),

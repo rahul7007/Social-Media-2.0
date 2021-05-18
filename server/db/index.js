@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/SocialMedia-2', { useNewUrlParser: true })
+    .connect('mongodb://127.0.0.1:27017/SocialMedia-2', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
     .catch(e => {
         console.error('Connection error', e.message)
     })
