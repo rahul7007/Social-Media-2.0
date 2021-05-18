@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 // import api from "../../api";
 
 //redux
 import { alert } from "../../action/AlertAction";
 import { useDispatch } from "react-redux";
-import { registerMe } from "../../action/AuthAction";
+import { registerUser } from "../../action/AuthAction";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,10 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const { name, email, passwordConfirm, password } = formData;
+
+  const isAuthenticated = useSelector(
+    (state) => state.AuthReducer.isAuthenticated
+  );
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value }); ////purpose of ...formdata
@@ -47,9 +52,15 @@ const Register = () => {
       // } catch (err) {
       //   console.log(err);
       // }
-      dispatch(registerMe({ name, email, password }));
+      dispatch(registerUser({ name, email, password }));
     }
   };
+
+  // Redirect to dashboard once succssful register
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <>
       <h1 className="large text-primary">Sign Up</h1>

@@ -9,6 +9,7 @@ const initialState = {
 const AuthReducer = (authState = initialState, action) => {
     switch (action.type) {
         case "REGISTER_SUCCESS":
+        case "LOGIN_SUCCESS":
             console.log("Payload in red", action.payload);
             localStorage.setItem("token", action.payload)
             return {
@@ -19,7 +20,9 @@ const AuthReducer = (authState = initialState, action) => {
             }
 
         case "REGISTER_FAIL":
-            // case "AUTH_ERROR":
+        case "AUTH_ERROR":
+        case "LOGIN_FAIL":
+        case "LOGOUT":
             localStorage.removeItem("token")
             return {
                 ...authState,

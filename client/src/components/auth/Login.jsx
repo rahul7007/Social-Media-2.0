@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import api from "../../api";
+
+//redux
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../action/AuthAction";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +13,12 @@ const Login = () => {
     password: "",
   });
 
+  const dispatch = useDispatch();
   const { email, password } = formData;
+
+  const isAuthenticated = useSelector(
+    (state) => state.AuthReducer.isAuthenticated
+  );
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value }); ////purpose of ...formdata
@@ -22,13 +32,19 @@ const Login = () => {
     };
 
     try {
-      await api.login(User).then((res) => {
-        console.log(res);
-      });
+      // await api.login(User).then((res) => {
+      //   console.log(res);
+      // });
+      dispatch(loginUser(User));
     } catch (err) {
       console.log(err);
     }
   };
+
+  // Redirect to dashboard if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <>
       <h1 className="large text-primary">Sign In</h1>
