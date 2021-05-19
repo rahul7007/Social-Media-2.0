@@ -22,11 +22,11 @@ router.post('/login',
 
 router.get('/login/:tempToken', auth, MbDetectCtrl.getLogin) //hit this all the time to see if the user is logged or not and it will also give the user data
 
-router.get('/profile/me', auth, MbDetectCtrl.myProfile)
+router.get('/profile/me/:tempToken', auth, MbDetectCtrl.myProfile)
 
 //Create/update user profile
 //private
-router.post('/profile/', [auth, [
+router.post('/profile/:tempToken', [auth, [
     body('status', 'Status is required').not().isEmpty(),
     body('skills', 'Skills is required').not().isEmpty()
 ]], MbDetectCtrl.createProfile)
