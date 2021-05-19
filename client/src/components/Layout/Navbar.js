@@ -16,13 +16,13 @@ const Navbar = () => {
     const AuthLinkes = () => {
         return (
             <ul>
+                <li><Link to="/dashboard">Dashboard</Link></li>
                 <li>
                     <a onClick={() => dispatch(logoutUser())} href="#!">
                         <i className="fas fa-sign-out-alt"></i>
                         <span className="hide-sm">Logout</span>
                     </a>
                 </li>
-                <li><Link to="/dashboard">DBA</Link></li>
             </ul >
         )
     }
@@ -33,7 +33,6 @@ const Navbar = () => {
                 <li><Link to="/">Developers</Link></li>
                 <li><Link to="/register">Register</Link></li>
                 <li><Link to="/login">Login</Link></li>
-                <li><Link to="/dashboard">DBN</Link></li>
             </ul >
         )
     }
@@ -47,22 +46,6 @@ const Navbar = () => {
             <h1>
                 <Link to="/"><i className="fas fa-code"></i> DevConnector</Link>
             </h1>
-            {/* <ul>
-                <li><Link to="/">Developers</Link></li>
-                <li><Link to="/register">Register</Link></li>
-                <li><Link to="/login">Login</Link></li>
-            </ul> */}
-            {/* {!isLoading && (<>{isAuthenticated ? authLinkes : guestLinks}</>)} */}
-            {/* {!isAuthenticated ? <ul>
-                <li><Link to="/">Developers</Link></li>
-                <li><Link to="/register">Register</Link></li>
-                <li><Link to="/login">Login</Link></li>
-            </ul > : <ul>
-                <li><a onClick={dispatch(logoutUser())} href="#!">
-                    <i className="fas fa-sign-out-alt"></i>
-                    <span className="hide-sm">Logout</span>
-                </a></li>
-            </ul >} */}
             {isAuthenticated ? <AuthLinkes /> : <GuestLinks />}
         </nav>
     )

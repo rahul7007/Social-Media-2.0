@@ -10,7 +10,7 @@ const AuthReducer = (authState = initialState, action) => {
     switch (action.type) {
         case "REGISTER_SUCCESS":
         case "LOGIN_SUCCESS":
-            console.log("Payload in red", action.payload);
+            // console.log("Payload in red", action.payload);
             localStorage.setItem("token", action.payload)
             return {
                 ...authState,

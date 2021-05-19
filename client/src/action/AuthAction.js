@@ -8,7 +8,8 @@ import {
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT
+    LOGOUT,
+    CLEAR_PROFILE
 } from './types';
 import setAuthToken from '../utils/setAuthToken'
 
@@ -80,7 +81,7 @@ export const loginUser = ({ email, password }) => async (dispatch) => {
     try {
         const { data } = await api.login({ email, password }) //fetch the api
         dispatch({ type: LOGIN_SUCCESS, payload: data.token })
-        console.log(data.token)
+        // console.log(data.token)
 
         //automatically load user after successful login
         dispatch(loadUser())
@@ -100,9 +101,12 @@ export const loginUser = ({ email, password }) => async (dispatch) => {
 
 }
 
+
+//Logout/Clear profile
 export const logoutUser = () => async dispatch => {
 
     try {
+        dispatch({ type: CLEAR_PROFILE })
         dispatch({ type: LOGOUT })
     } catch (err) {
         console.log(err.response)
