@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { getCurrentProfile } from "../../action/ProfileAction";
 import { useSelector } from "react-redux";
 import DashboardActions from './DashboardActions'
+import Experience from './Experience'
+import Education from './Education'
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -26,6 +28,8 @@ const Dashboard = () => {
                 {/* Once the user has profile, he/she can update it */}
 
                 <DashboardActions />
+                <Experience experience={Profile.experience} />
+                <Education education={Profile.education} />
 
             </> :
                 <>
