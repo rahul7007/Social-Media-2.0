@@ -12,12 +12,15 @@ export const getLoggedInUser = (tempToken) => api.get(`/login/${tempToken}`)
 
 export const getCurrentProfile = (tempToken) => api.get(`/profile/me/${tempToken}`)
 
+export const createNewProfile = (payload, tempToken) => api.post(`/profile/${tempToken}`, payload)
+
 
 const apis = {
     register,
     login,
     getLoggedInUser,
-    getCurrentProfile
+    getCurrentProfile,
+    createNewProfile
 }
 
 export default apis
