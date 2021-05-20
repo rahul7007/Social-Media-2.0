@@ -4,6 +4,7 @@ const ProfileSchema = new mongoose.Schema({
   //Reference to user model, since every user has their profile  
   user: {
     type: mongoose.Schema.Types.ObjectId,
+    // type: String, //for edit, make it String, don't know why not working when we use "type: mongoose.Schema.Types.ObjectId"
     ref: 'user'
   },
   company: {

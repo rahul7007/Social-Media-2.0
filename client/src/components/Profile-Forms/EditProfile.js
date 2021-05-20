@@ -1,10 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
-import { createProfile } from '../../action/ProfileAction'
+import { createProfile, getCurrentProfile } from '../../action/ProfileAction'
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { alert } from '../../action/AlertAction';
 
-const CreateProfile = (props) => {
+const EditProfile = (props) => {
+
     const dispatch = useDispatch();
+
+    const Profile = useSelector((state) => state.ProfileReducer.profile)
+    const Load = useSelector((state) => state.ProfileReducer.profileLoading)
+    // console.log("Profile from edit profile", Profile)
+    // console.log("Loading from edit profile", Load)
+
+    // console.log("Profile", Profile)
+
     const [formData, setFormData] = useState({
         company: '',
         website: '',
@@ -21,6 +32,25 @@ const CreateProfile = (props) => {
     })
 
     const [displaySocialInputs, toggleSocialInputs] = useState(false)
+
+    useEffect(() => {
+        getCurrentProfile()
+
+        setFormData({
+            company: Profile.company,
+            website: Profile.website,
+            location: Profile.location,
+            status: Profile.status,
+            skills: Profile.skills,
+            githubusername: Profile.githubusername,
+            bio: Profile.bio,
+            twitter: Profile.social.twitter,
+            facebook: Profile.social.facebook,
+            linkedin: Profile.social.linkedin,
+            youtube: Profile.social.youtube,
+            instagram: Profile.social.instagram
+        })
+    }, [])
 
     const {
         company,
@@ -42,13 +72,13 @@ const CreateProfile = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(createProfile(formData, props.history, false)) //don't know how how props is wokring here
+        dispatch(createProfile(formData, props.history, true)) //don't know how how props is wokring here
     }
 
     return (
         <>
             <h1 className="large text-primary">
-                Create Your Profile
+                Edit Your Profile
       </h1>
             <p className="lead">
                 <i className="fas fa-user"></i> Let's get some information to make your
@@ -161,4 +191,4 @@ const CreateProfile = (props) => {
     )
 }
 
-export default withRouter(CreateProfile)
+export default withRouter(EditProfile)

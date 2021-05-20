@@ -16,13 +16,13 @@ export const getCurrentProfile = () => async dispatch => {
 }
 
 // Create/update profile
-export const createProfile = (formData, history, edit = false) => async dispatch => {
+export const createProfile = (formData, history, edit) => async dispatch => {
     try {
         const tempToken = localStorage.getItem("token")
-        console.log("1", formData)
-        console.log("2", history)
+        // console.log("1", formData)
+        // console.log("2", history)
         const { data } = await api.createNewProfile(formData, tempToken) //create/update profile
-        console.log("This is you", data)
+        // console.log("This is you", data)
 
 
         //after creating get the profile data as well
