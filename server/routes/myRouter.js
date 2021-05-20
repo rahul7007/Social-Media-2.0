@@ -47,7 +47,7 @@ router.delete('/profile', auth, MbDetectCtrl.deleteUser)
 
 //Add experience
 //private
-router.put('/profile/experience', [auth, [
+router.put('/profile/experience/:tempToken', [auth, [
     check('title', 'Title is required').not().isEmpty(),
     check('company', 'Company is required').not().isEmpty(),
     check('from', 'From date is required').not().isEmpty()
@@ -60,7 +60,7 @@ router.delete('/profile/experience:exp_id', auth, MbDetectCtrl.deleteExperience)
 //@ Add profile education
 //@ private
 
-router.put('/profile/education', [auth, [
+router.put('/profile/education/:tempToken', [auth, [
     check('school', 'School is required').not().isEmpty(),
     check('degree', 'Degree is required').not().isEmpty(),
     check('fieldofstudy', 'Field of study is required').not().isEmpty(),

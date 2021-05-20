@@ -40,3 +40,46 @@ export const createProfile = (formData, history, edit) => async dispatch => {
         console.log(err)
     }
 }
+
+
+// add experience
+export const addExperience = (formData, history) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+        // console.log("1", formData)
+        const { data } = await api.addExperienceApi(formData, tempToken) //create/update profile
+
+
+        //after creating get the profile data as well
+        dispatch({ type: 'UPDATE_PROFILE', payload: data })
+
+        //show alert based on create/edit
+        dispatch(alert('Experience Added', 'success'))
+
+        history.push('/dashboard')  //we need to use props for this in createProfile component
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+//Add education
+export const addEducation = (formData, history) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+        // console.log("1", formData)
+        const { data } = await api.addEducationApi(formData, tempToken) //create/update profile
+
+
+        //after creating get the profile data as well
+        dispatch({ type: 'UPDATE_PROFILE', payload: data })
+
+        //show alert based on create/edit
+        dispatch(alert('Education Added', 'success'))
+
+        history.push('/dashboard')  //we need to use props for this in createProfile component
+
+    } catch (err) {
+        console.log(err)
+    }
+}

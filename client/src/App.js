@@ -12,6 +12,8 @@ import Alert from './components/Layout/Alert'
 import Dashboard from './components/Dashboard/Dashboard'
 import CreateProfile from './components/Profile-Forms/CreateProfile'
 import EditProfile from './components/Profile-Forms/EditProfile'
+import AddExperience from './components/Profile-Forms/AddExperience'
+import AddEducation from './components/Profile-Forms/AddEducation'
 import PrivateRoute from './components/routing/PrivateRoute'
 import { loadUser } from './action/AuthAction'
 import setAuthToken from './utils/setAuthToken'
@@ -43,6 +45,8 @@ const App = () => {
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/create-profile" component={CreateProfile} />
             <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+            <PrivateRoute exact path="/add-experience" component={AddExperience} />
+            <PrivateRoute exact path="/add-education" component={AddEducation} />
           </Switch>
         </section>
       </>
