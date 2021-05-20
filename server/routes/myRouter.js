@@ -43,7 +43,7 @@ router.get('/profile/user/:user_id', MbDetectCtrl.getProfileByUser_id)
 
 //Delete profile, user & posts
 //private
-router.delete('/profile', auth, MbDetectCtrl.deleteUser)
+router.delete('/profile/:tempToken', auth, MbDetectCtrl.deleteUser)
 
 //Add experience
 //private

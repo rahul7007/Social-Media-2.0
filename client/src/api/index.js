@@ -17,6 +17,8 @@ export const addExperienceApi = (payload, tempToken) => api.put(`/profile/experi
 export const addEducationApi = (payload, tempToken) => api.put(`/profile/education/${tempToken}`, payload)
 export const deleteExperienceApi = (tempToken, exp_id) => api.delete(`/profile/experience/${tempToken}/${exp_id}`)
 export const deleteEducationApi = (tempToken, edu_id) => api.delete(`/profile/education/${tempToken}/${edu_id}`)
+export const deleteAccountApi = (tempToken) => api.delete(`/profile/${tempToken}`)
+
 
 const apis = {
     register,
@@ -27,7 +29,8 @@ const apis = {
     addExperienceApi,
     addEducationApi,
     deleteExperienceApi,
-    deleteEducationApi
+    deleteEducationApi,
+    deleteAccountApi
 }
 
 export default apis

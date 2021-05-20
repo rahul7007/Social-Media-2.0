@@ -123,3 +123,32 @@ export const deleteEducation = (edu_id) => async dispatch => {
         console.log(err)
     }
 }
+
+
+//Delete Account & profile
+export const deleteAccount = (history) => async dispatch => {
+
+    // Ask user before delete act
+    if (window.confirm("Are you sure ? This cannot be undone")) {
+        try {
+            const tempToken = localStorage.getItem("token")
+
+            const { data } = await api.deleteAccountApi(tempToken)
+
+
+            //after creating get the profile data as well
+            dispatch({ type: 'CLEAR_PROFILE' })
+            dispatch({ type: 'ACCOUNT_DELETED' })
+
+            //show alert based on create/edit
+            dispatch(alert('Your account has been successfully deleted'))
+
+            history.push('/') //not working
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+}

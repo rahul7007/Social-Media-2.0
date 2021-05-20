@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { useDispatch } from "react-redux";
-import { getCurrentProfile } from "../../action/ProfileAction";
+import { getCurrentProfile, deleteAccount } from "../../action/ProfileAction";
 import { useSelector } from "react-redux";
 import DashboardActions from './DashboardActions'
 import Experience from './Experience'
 import Education from './Education'
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const dispatch = useDispatch();
 
     const Name = useSelector((state) => state.AuthReducer.user.name)
@@ -31,6 +31,12 @@ const Dashboard = () => {
                 <Experience experience={Profile.experience} />
                 <Education education={Profile.education} />
 
+                <div className="my-2">
+                    <button className="btn btn-danger" onClick={() => dispatch(deleteAccount(props.history))}>
+                        <i className="fas fa-user-minus" /> Delete My Account
+                    </button>
+                </div>
+
             </> :
                 <>
                     You have not setup profile yet, please put some info
@@ -42,4 +48,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default withRouter(Dashboard)
