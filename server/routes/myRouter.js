@@ -55,7 +55,7 @@ router.put('/profile/experience/:tempToken', [auth, [
 
 //Delete experience from profile
 //private
-router.delete('/profile/experience:exp_id', auth, MbDetectCtrl.deleteExperience)
+router.delete('/profile/experience/:tempToken/:exp_id', auth, MbDetectCtrl.deleteExperience)
 
 //@ Add profile education
 //@ private
@@ -70,7 +70,7 @@ router.put('/profile/education/:tempToken', [auth, [
 
 //Delete education from profile
 //private
-router.delete('/profile/education:edu_id', auth, MbDetectCtrl.deleteEducation)
+router.delete('/profile/education/:tempToken/:edu_id', auth, MbDetectCtrl.deleteEducation)
 
 //Get user repo from guthub
 //public

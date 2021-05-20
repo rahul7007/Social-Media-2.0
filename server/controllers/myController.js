@@ -313,6 +313,7 @@ addExperience = async (req, res) => {
 }
 
 deleteExperience = async (req, res) => {
+    console.log("calling 1")
     try {
         const profile = await Profile.findOne({ user: req.user.id })
 
@@ -387,7 +388,6 @@ deleteEducation = async (req, res) => {
         console.log(error.message);
         res.status(500).send("Server Error")
     }
-    console.log("DELETE");
 }
 
 gitGuthubRepo = async (req, res) => {

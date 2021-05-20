@@ -83,3 +83,43 @@ export const addEducation = (formData, history) => async dispatch => {
         console.log(err)
     }
 }
+
+// Delete Experience
+
+export const deleteExperience = (exp_id) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+
+        const { data } = await api.deleteExperienceApi(tempToken, exp_id) //create/update profile
+
+
+        //after creating get the profile data as well
+        dispatch({ type: 'UPDATE_PROFILE', payload: data })
+
+        //show alert based on create/edit
+        dispatch(alert('Experience removed', 'success'))
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+// Delete Education
+
+export const deleteEducation = (edu_id) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+
+        const { data } = await api.deleteEducationApi(tempToken, edu_id) //create/update profile
+
+
+        //after creating get the profile data as well
+        dispatch({ type: 'UPDATE_PROFILE', payload: data })
+
+        //show alert based on create/edit
+        dispatch(alert('Education removed', 'success'))
+
+    } catch (err) {
+        console.log(err)
+    }
+}

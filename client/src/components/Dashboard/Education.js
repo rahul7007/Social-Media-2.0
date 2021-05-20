@@ -1,7 +1,10 @@
 import React from 'react'
 import Moment from 'react-moment'
+import { useDispatch } from "react-redux";
+import { deleteEducation } from '../../action/ProfileAction'
 
 const Education = (props) => {
+    const dispatch = useDispatch();
     const educations = props.education.map((edu) => (
         <tr key={edu._id}>
             <td>{edu.school}</td>
@@ -11,6 +14,7 @@ const Education = (props) => {
             </td>
             <td>
                 <button
+                    onClick={() => dispatch(deleteEducation(edu._id))}
                     className="btn btn-danger"
                 >
                     Delete
