@@ -24,6 +24,20 @@ const ProfileReducer = (state = initialState, action) => {
                 repos: [],
                 profileLoading: false
             }
+
+        case "GET_PROFILES":
+            return {
+                ...state,
+                profiles: action.payload,
+                profileLoading: false
+            }
+
+        case "GET_REPOS":
+            return {
+                ...state,
+                repos: action.payload,
+                profileLoading: false
+            }
         default: return state
     }
 }

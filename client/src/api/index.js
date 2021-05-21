@@ -19,6 +19,11 @@ export const deleteExperienceApi = (tempToken, exp_id) => api.delete(`/profile/e
 export const deleteEducationApi = (tempToken, edu_id) => api.delete(`/profile/education/${tempToken}/${edu_id}`)
 export const deleteAccountApi = (tempToken) => api.delete(`/profile/${tempToken}`)
 
+// get all profiles
+export const getAllProfilesApi = () => api.get(`/profile/`)
+export const getProfileByIdApi = (user_id) => api.get(`/profile/user/${user_id}`)
+export const getGithubReposApi = (user_name) => api.get(`/profile/github/${user_name}`)
+
 
 const apis = {
     register,
@@ -30,7 +35,10 @@ const apis = {
     addEducationApi,
     deleteExperienceApi,
     deleteEducationApi,
-    deleteAccountApi
+    deleteAccountApi,
+    getAllProfilesApi,
+    getProfileByIdApi,
+    getGithubReposApi
 }
 
 export default apis

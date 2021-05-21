@@ -152,3 +152,43 @@ export const deleteAccount = (history) => async dispatch => {
 
 
 }
+
+//Get all profiles
+export const getAllProfiles = () => async dispatch => {
+
+    // clear whatever's in the current profile,when they go to the profile list page
+    dispatch({ type: 'CLEAR_PROFILE' })
+
+    try {
+        const { data } = await api.getAllProfilesApi()
+        dispatch({ type: 'GET_PROFILES', payload: data })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+//Get profile by id
+export const getProfileById = (userId) => async dispatch => {
+
+    try {
+        const { data } = await api.getProfileByIdApi(userId)
+        console.log("profile Data", data)
+        dispatch({ type: 'GET_PROFILE', payload: data })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+//Get github repos
+export const getGithubRepos = (userName) => async dispatch => {
+
+    try {
+        const { data } = await api.getGithubReposApi(userName)
+        console.log("profile Data", data)
+        dispatch({ type: 'GET_REPOS', payload: data })
+    } catch (err) {
+        console.log(err)
+    }
+}

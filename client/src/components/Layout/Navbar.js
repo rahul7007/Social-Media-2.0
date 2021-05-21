@@ -23,6 +23,7 @@ const Navbar = () => {
                         <span className="hide-sm">Logout</span>
                     </a>
                 </li>
+                <li><Link to="/profiles">Developers Profiles</Link></li>
             </ul >
         )
     }
@@ -30,7 +31,7 @@ const Navbar = () => {
     const GuestLinks = () => {
         return (
             <ul>
-                <li><Link to="/">Developers</Link></li>
+                <li><Link to="/profiles">Developers Profiles</Link></li>
                 <li><Link to="/register">Register</Link></li>
                 <li><Link to="/login">Login</Link></li>
             </ul >

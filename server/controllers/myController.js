@@ -254,6 +254,7 @@ getProfileByUser_id = async (req, res) => {
 deleteUser = async (req, res) => {
     try {
         //@todo - remove user posts
+        await Post.deleteMany({ user: req.user.id })
 
         //delete profile
         await Profile.findOneAndRemove({ user: req.user.id })
