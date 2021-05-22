@@ -1,4 +1,4 @@
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST } from '../action/types'
+import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST } from '../action/types'
 
 const initialState = {
     posts: [],
@@ -41,6 +41,13 @@ const PostReducerNew = (state = initialState, action) => {
             return {
                 ...state,
                 posts: state.posts.filter((post) => post._id !== payload), //this time payload is the postId
+                postLoading: false
+            };
+
+        case ADD_POST:
+            return {
+                ...state,
+                posts: [payload, ...state.posts],
                 postLoading: false
             };
 

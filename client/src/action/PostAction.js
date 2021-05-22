@@ -1,6 +1,6 @@
 import { alert } from './AlertAction'
 import * as api from '../api/index'
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST } from './types'
+import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST } from './types'
 
 //Get posts
 export const getAllPosts = () => async dispatch => {
@@ -66,6 +66,26 @@ export const delPostById = (postId) => async dispatch => {
         dispatch({ type: DELETE_POST, payload: postId })
 
         dispatch(alert('Post removed', 'success'))
+
+    } catch (err) {
+        console.log(err)
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+// add a post
+export const addPost = (formData) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+
+        const { data } = await api.addPostApi(tempToken, formData)
+
+        dispatch({ type: ADD_POST, payload: data })
+
+        dispatch(alert('Post created', 'success'))
 
     } catch (err) {
         console.log(err)

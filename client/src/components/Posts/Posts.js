@@ -9,6 +9,7 @@ import Spinner from '../Layout/Spinner'
 import PostItem from './PostItem'
 import Moment from 'react-moment'
 import { addLike, removeLike, delPostById } from '../../action/PostAction'
+import PostForm from './PostForm'
 
 const Posts = () => {
 
@@ -31,20 +32,21 @@ const Posts = () => {
                 <>
                     <h1 className="large text-primary">Posts</h1>
                     <p className="lead"><i className="fas fa-user"></i> Welcome to the community!</p>
+                    <PostForm />
                     {/* PostItem component */}
                     <div className="posts">
                         {posts.map((val) => (
                             // <PostItem key={val._id} post={val} />
                             <div key={val._id} className="post bg-white p-1 my-1">
                                 <div>
-                                    <a href="profile.html">
+                                    <Link to={`/profile/${val.user}`}>
                                         <img
                                             className="round-img"
                                             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
                                             alt=""
                                         />
                                         <h4>{val.name}</h4>
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div>
                                     <p className="my-1">{val.text}</p>
