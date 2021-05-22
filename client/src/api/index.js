@@ -25,7 +25,10 @@ export const getProfileByIdApi = (user_id) => api.get(`/profile/user/${user_id}`
 export const getGithubReposApi = (user_name) => api.get(`/profile/github/${user_name}`)
 
 
+// Posts
 export const getAllPostsApi = (tempToken) => api.get(`/getAllPosts/${tempToken}`)
+export const likePostsByIdApi = (tempToken, postId) => api.put(`/posts/like/${tempToken}/${postId}`)
+export const unlikePostsByIdApi = (tempToken, postId) => api.put(`/posts/unlike/${tempToken}/${postId}`)
 
 const apis = {
     register,
@@ -41,7 +44,9 @@ const apis = {
     getAllProfilesApi,
     getProfileByIdApi,
     getGithubReposApi,
-    getAllPostsApi
+    getAllPostsApi,
+    likePostsByIdApi,
+    unlikePostsByIdApi
 }
 
 export default apis

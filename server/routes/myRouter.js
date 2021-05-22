@@ -97,12 +97,12 @@ router.delete('/detPostById/:id', auth, MbDetectCtrl.detPostById)
 // @route    PUT api/posts/like/:id
 // @desc     Like a post
 // @access   Private
-router.put('/posts/like/:id', auth, MbDetectCtrl.likePost)
+router.put('/posts/like/:tempToken/:id', auth, MbDetectCtrl.likePost)
 
 // @route    PUT api/posts/unlike/:id
 // @desc     Unlike a post
 // @access   Private
-router.put('/posts/unlike/:id', auth, MbDetectCtrl.unlikePost)
+router.put('/posts/unlike/:tempToken/:id', auth, MbDetectCtrl.unlikePost)
 
 // @route    POST api/posts/comment/:id
 // @desc     Comment on a post
