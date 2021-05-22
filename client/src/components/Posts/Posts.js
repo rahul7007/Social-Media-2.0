@@ -8,7 +8,7 @@ import { getAllPosts } from '../../action/PostAction'
 import Spinner from '../Layout/Spinner'
 import PostItem from './PostItem'
 import Moment from 'react-moment'
-import { addLike, removeLike } from '../../action/PostAction'
+import { addLike, removeLike, delPostById } from '../../action/PostAction'
 
 const Posts = () => {
 
@@ -65,7 +65,7 @@ const Posts = () => {
 
                                     {/* del button will be only available if the post.user & user.id match  */}
                                     {val.user === currentUser && (
-                                        < button type="button" className="btn btn-danger">
+                                        < button type="button" onClick={e => dispatch(delPostById(val._id))} className="btn btn-danger">
                                             <i className="fas fa-times"></i>
                                         </button>
                                     )}

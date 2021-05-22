@@ -78,7 +78,7 @@ router.get('/profile/github/:username', MbDetectCtrl.gitGuthubRepo)
 
 //Create a post
 //private
-router.post('/posts', [auth, [
+router.post('/posts/:tempToken', [auth, [
     check('text', 'Text is required').not().isEmpty()
 ]], MbDetectCtrl.createPosts)
 
@@ -92,7 +92,7 @@ router.get('/getPostById/:id', auth, MbDetectCtrl.getAllPostById)
 
 //Delete a post by id
 //private
-router.delete('/detPostById/:id', auth, MbDetectCtrl.detPostById)
+router.delete('/delPostById/:tempToken/:id', auth, MbDetectCtrl.detPostById)
 
 // @route    PUT api/posts/like/:id
 // @desc     Like a post
