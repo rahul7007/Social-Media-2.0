@@ -22,6 +22,7 @@ import setAuthToken from './utils/setAuthToken'
 
 // posts
 import Posts from './components/Posts/Posts.js'
+import Post from './components/post/Post'
 
 // we need to check to see if there's a token and if so,we'll put in global header, 
 if (localStorage.getItem("token")) {
@@ -56,6 +57,7 @@ const App = () => {
             <Route exact path="/profile/:id" component={Profile} />
 
             <PrivateRoute exact path="/posts" component={Posts} />
+            <PrivateRoute exact path="/post/:id" component={Post} />
           </Switch>
         </section>
       </>

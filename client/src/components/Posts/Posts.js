@@ -15,7 +15,7 @@ const Posts = () => {
 
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.PostReducerNew.posts);
-    console.log("POST->", posts)
+    // console.log("POST->", posts)
     const postLoading = useSelector((state) => state.PostReducerNew.postLoading);
 
     const currentUser = useSelector((state) => state.AuthReducer.user._id); //60a727ab500408c480bdb658

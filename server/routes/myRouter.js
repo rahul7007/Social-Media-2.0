@@ -88,7 +88,7 @@ router.get('/getAllPosts/:tempToken', auth, MbDetectCtrl.getAllPosts)
 
 //Get post by id
 //private
-router.get('/getPostById/:id', auth, MbDetectCtrl.getAllPostById)
+router.get('/getPostById/:tempToken/:id', auth, MbDetectCtrl.getAllPostById)
 
 //Delete a post by id
 //private

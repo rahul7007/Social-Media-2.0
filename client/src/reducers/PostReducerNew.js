@@ -1,4 +1,4 @@
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST } from '../action/types'
+import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST, GET_SINGLE_POST } from '../action/types'
 
 const initialState = {
     posts: [],
@@ -50,6 +50,13 @@ const PostReducerNew = (state = initialState, action) => {
                 posts: [payload, ...state.posts],
                 postLoading: false
             };
+
+        case GET_SINGLE_POST:
+            return {
+                ...state,
+                post: payload,
+                postLoading: false
+            }
 
         default: return state
     }
