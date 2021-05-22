@@ -13,7 +13,7 @@ const PostReducerNew = (state = initialState, action) => {
 
     switch (type) {
 
-        case 'GET_POSTS':
+        case GET_POSTS:
             return {
                 ...state,
                 posts: payload,

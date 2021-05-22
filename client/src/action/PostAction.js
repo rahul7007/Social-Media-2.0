@@ -9,7 +9,7 @@ export const getAllPosts = () => async dispatch => {
 
         const { data } = await api.getAllPostsApi(tempToken)
 
-        dispatch({ type: 'GET_POSTS', payload: data })
+        dispatch({ type: GET_POSTS, payload: data })
 
     } catch (err) {
         console.log(err)
