@@ -84,7 +84,7 @@ router.post('/posts', [auth, [
 
 //Get all posts
 //private
-router.get('/getAllPosts', auth, MbDetectCtrl.getAllPosts)
+router.get('/getAllPosts/:tempToken', auth, MbDetectCtrl.getAllPosts)
 
 //Get post by id
 //private

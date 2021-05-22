@@ -20,6 +20,9 @@ import PrivateRoute from './components/routing/PrivateRoute'
 import { loadUser } from './action/AuthAction'
 import setAuthToken from './utils/setAuthToken'
 
+// posts
+import Posts from './components/Posts/Posts.js'
+
 // we need to check to see if there's a token and if so,we'll put in global header, 
 if (localStorage.getItem("token")) {
   setAuthToken(localStorage.getItem("token"))
@@ -51,6 +54,8 @@ const App = () => {
             <PrivateRoute exact path="/add-education" component={AddEducation} />
             <Route exact path="/profiles" component={Profiles} />Profile
             <Route exact path="/profile/:id" component={Profile} />
+
+            <PrivateRoute exact path="/posts" component={Posts} />
           </Switch>
         </section>
       </>

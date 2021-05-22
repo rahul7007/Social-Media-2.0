@@ -17,6 +17,7 @@ const Navbar = () => {
         return (
             <ul>
                 <li><Link to="/dashboard">Dashboard</Link></li>
+                <li><Link to="/posts">Posts</Link></li>
                 <li>
                     <a onClick={() => dispatch(logoutUser())} href="#!">
                         <i className="fas fa-sign-out-alt"></i>

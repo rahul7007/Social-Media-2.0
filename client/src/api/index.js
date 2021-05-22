@@ -25,6 +25,8 @@ export const getProfileByIdApi = (user_id) => api.get(`/profile/user/${user_id}`
 export const getGithubReposApi = (user_name) => api.get(`/profile/github/${user_name}`)
 
 
+export const getAllPostsApi = (tempToken) => api.get(`/getAllPosts/${tempToken}`)
+
 const apis = {
     register,
     login,
@@ -38,7 +40,8 @@ const apis = {
     deleteAccountApi,
     getAllProfilesApi,
     getProfileByIdApi,
-    getGithubReposApi
+    getGithubReposApi,
+    getAllPostsApi
 }
 
 export default apis
