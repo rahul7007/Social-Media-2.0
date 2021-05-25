@@ -32,6 +32,8 @@ export const unlikePostsByIdApi = (tempToken, postId) => api.put(`/posts/unlike/
 export const delPostsByIdApi = (tempToken, postId) => api.delete(`/delPostById/${tempToken}/${postId}`)
 export const addPostApi = (tempToken, payload) => api.post(`/posts/${tempToken}`, payload)
 export const getPostByIdApi = (tempToken, postId) => api.get(`/getPostById/${tempToken}/${postId}`)
+export const addCommentApi = (tempToken, postId, payload) => api.post(`/posts/comment/${tempToken}/${postId}`, payload)
+export const delCommentApi = (tempToken, postId, commentId) => api.delete(`/posts/comment/${tempToken}/${postId}/${commentId}`)
 
 const apis = {
     register,
@@ -52,7 +54,9 @@ const apis = {
     unlikePostsByIdApi,
     delPostsByIdApi,
     addPostApi,
-    getPostByIdApi
+    getPostByIdApi,
+    addCommentApi,
+    delCommentApi
 }
 
 export default apis

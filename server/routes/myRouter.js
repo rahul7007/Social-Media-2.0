@@ -107,7 +107,7 @@ router.put('/posts/unlike/:tempToken/:id', auth, MbDetectCtrl.unlikePost)
 // @route    POST api/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private
-router.post('/posts/comment/:id', [auth, [
+router.post('/posts/comment/:tempToken/:id', [auth, [
     check('text', 'text is requird').not().isEmpty()
 ]], MbDetectCtrl.commentOnPost)
 
@@ -115,4 +115,4 @@ router.post('/posts/comment/:id', [auth, [
 // @desc     Delete comment
 //we need both : post id & comment id. Find a post by id and which post to delete
 // @access   Private
-router.delete('/posts/comment/:id/:comment_id', auth, delCommentFromPost)
+router.delete('/posts/comment/:tempToken/:id/:comment_id', auth, delCommentFromPost)

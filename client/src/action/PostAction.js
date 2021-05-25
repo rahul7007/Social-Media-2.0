@@ -1,6 +1,15 @@
 import { alert } from './AlertAction'
 import * as api from '../api/index'
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST, GET_SINGLE_POST } from './types'
+import {
+    GET_POSTS,
+    POST_ERROR,
+    UPDATE_LIKES,
+    DELETE_POST,
+    ADD_POST,
+    GET_SINGLE_POST,
+    ADD_COMMENT,
+    REMOVE_COMMENT
+} from './types'
 
 //Get posts
 export const getAllPosts = () => async dispatch => {
@@ -104,6 +113,46 @@ export const getSinglePost = (postId) => async dispatch => {
         const { data } = await api.getPostByIdApi(tempToken, postId)
 
         dispatch({ type: GET_SINGLE_POST, payload: data })
+
+    } catch (err) {
+        console.log(err)
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+
+//add comment to a post
+export const addComment = (postId, formData) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+
+        const { data } = await api.addCommentApi(tempToken, postId, formData)
+
+        dispatch({ type: ADD_COMMENT, payload: data })
+
+    } catch (err) {
+        console.log(err)
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+
+//delete comment
+export const delComment = (postId, commentId) => async dispatch => {
+    try {
+        const tempToken = localStorage.getItem("token")
+
+        await api.delCommentApi(tempToken, postId, commentId)
+
+        dispatch({
+            type: REMOVE_COMMENT, payload: commentId
+        })
 
     } catch (err) {
         console.log(err)

@@ -1,4 +1,13 @@
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST, GET_SINGLE_POST } from '../action/types'
+import {
+    GET_POSTS,
+    POST_ERROR,
+    UPDATE_LIKES,
+    DELETE_POST,
+    ADD_POST,
+    GET_SINGLE_POST,
+    ADD_COMMENT,
+    REMOVE_COMMENT
+} from '../action/types'
 
 const initialState = {
     posts: [],
@@ -55,6 +64,23 @@ const PostReducerNew = (state = initialState, action) => {
             return {
                 ...state,
                 post: payload,
+                postLoading: false
+            }
+
+        case ADD_COMMENT:
+            return {
+                ...state,
+                post: { ...state.post, comments: payload },
+                postLoading: false
+            }
+
+        case REMOVE_COMMENT:
+            return {
+                ...state,
+                post: {
+                    ...state.post,
+                    comments: state.post.comments.filter(val => val._id === payload)
+                },
                 postLoading: false
             }
 
