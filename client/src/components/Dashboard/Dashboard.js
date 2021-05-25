@@ -10,7 +10,7 @@ import Education from './Education'
 const Dashboard = (props) => {
     const dispatch = useDispatch();
 
-    const Name = useSelector((state) => state.AuthReducer.user.name)
+    const User = useSelector((state) => state.AuthReducer.user)
     const Profile = useSelector((state) => state.ProfileReducer.profile)
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const Dashboard = (props) => {
         <div>
             <h1 className="large text-primary">Dashboard</h1>
             <p className="lead">
-                <i className="fas fa-user" /> Welcome {Name}
+                <i className="fas fa-user" /> Welcome {User ? User.name : <label>Loading</label>}
             </p>
             {Profile !== null ? <>
 
